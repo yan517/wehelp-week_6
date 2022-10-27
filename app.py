@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
+import json
 
 def databaseConn():
     cnx = mysql.connector.connect(user='yan', password='',
@@ -14,7 +15,7 @@ app.secret_key="donotguessyouwillbeafraid"
 def index():
     return render_template("index.html")
 
-@app.route("/register", methods=["POST"])
+@app.route("/signup", methods=["POST"])
 def register():
     name = request.form["name"]
     username = request.form["usrname"]
@@ -79,5 +80,34 @@ def signOut():
     session["login"] = "fail"
     session["userProfile"] = ""
     return render_template("index.html")       
+
+@app.route("/addComment", methods=["POST"])
+def addCom():
+    comment = request.form["comment"]
+    if(comment):
+        cnx = databaseConn()
+        cursor = cnx.cursor()
+        add_comment = ("INSERT INTO message "
+                       "(member_id, content)"
+                       "VALUES (%s, %s);")
+        data = (session["userProfile"][0],comment)
+        cursor.execute(add_comment,data) 
+        cnx.commit()
+        cursor.close()
+        cnx.close()   
+        return redirect("/member")
+
+@app.route("/getComment")
+def getData():
+    if (session["login"] == "success"):
+        cnx = databaseConn()
+        cursor = cnx.cursor()
+        get_commemt = ("SELECT name, content from message left join member on member.id = message.member_id;")
+        cursor.execute(get_commemt)
+        data = cursor.fetchall()
+        cursor.close()
+        cnx.close()   
+        return json.dumps(data)
+
 
 app.run(port=3000)
