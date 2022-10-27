@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8" />
+        <title>歡迎來到我的個人網站</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="text-center">
+            <div style="background-color: #062c4b; color: white; font-size: 30px;">歡迎光臨，這是會員頁</div><br><br>
+            <p>{{ name }}，歡迎登入系統</p>
+            <a href="./signout">登出系統</a><br><br>
+            <div style="border: solid 1px;"></div><br>
+            <p>快來留言吧!</p>
+            <form action="" method="POST">
+                <label>肉容</label>
+                <input type="text" name="comment">
+                <button>送出</button>
+            </form><br>
+            <div style="border: solid 1px;"></div><br><br>
+            <diV id="discussion"></diV>
+        </div>
+    </body>
+</html>
