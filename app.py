@@ -66,8 +66,9 @@ def signIn():
 @app.route("/member")
 def member():
     if (session["login"] == "success"):
+        data = getData()
         username = session["userProfile"][1]
-        return render_template("member.html", name=username)
+        return render_template("member.html", name=username, datum=data)
     return redirect("/")
 
 @app.route("/error")
@@ -81,7 +82,7 @@ def signOut():
     session["userProfile"] = ""
     return render_template("index.html")       
 
-@app.route("/addComment", methods=["POST"])
+@app.route("/message", methods=["POST"])
 def addCom():
     comment = request.form["comment"]
     if(comment):
@@ -97,17 +98,16 @@ def addCom():
         cnx.close()   
         return redirect("/member")
 
-@app.route("/getComment")
 def getData():
     if (session["login"] == "success"):
         cnx = databaseConn()
         cursor = cnx.cursor()
-        get_commemt = ("SELECT name, content from message left join member on member.id = message.member_id;")
+        get_commemt = ("SELECT name, content, message.time from message left join member on member.id = message.member_id order by message.time DESC;")
         cursor.execute(get_commemt)
         data = cursor.fetchall()
         cursor.close()
         cnx.close()   
-        return json.dumps(data)
+        return data
 
 
 app.run(port=3000)

@@ -6,43 +6,21 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     </head>
     <body>
-        <script>
-            const getData =  () => fetch('./getComment')
-            .then((response) => response.json());
-            async function main() {
-                let result = null;
-                try {
-                    result = await getData();
-                    result.forEach(element => {
-                        createComment(element);
-                    });
-                } catch(err) {
-                    console.log(err);
-                }
-                console.log(result);
-            }
-            function createComment(data){
-                disDiv = document.getElementById('discussion');
-                row = document.createElement("div");
-                let comment = document.createTextNode(data[0] + ": " + data[1]);
-                row.appendChild(comment);
-                disDiv.prepend(row);
-            }
-            main();           
-        </script>
         <div class="text-center">
             <div style="background-color: #062c4b; color: white; font-size: 30px;">歡迎光臨，這是會員頁</div><br><br>
             <p>{{ name }}，歡迎登入系統</p>
             <a href="./signout">登出系統</a><br><br>
             <div style="border: solid 1px;"></div><br>
             <p>快來留言吧!</p>
-            <form action="./addComment" method="POST">
+            <form action="./message" method="POST">
                 <label>肉容</label>
                 <input type="text" name="comment">
                 <button>送出</button>
             </form><br>
             <div style="border: solid 1px;"></div><br><br>
-            <diV id="discussion"></diV>
+            {% for data in datum %}
+                <diV>{{data[0]}} : {{data[1]}}</diV>
+            {% endfor %}
         </div>
     </body>
 </html>
